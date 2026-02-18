@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% if not current_user.access_pin_hash %}
+<div class="card" style="border-color:#d4af37;">
+    <h3 style="margin-top:0; color:#d4af37">⚠️ ACTION REQUIRED</h3>
+    <p style="color:#bbb; margin-bottom:24px">You must establish a Master PIN and Security Question to view encrypted patient files.</p>
+    
+    <form action="{{ url_for('set_pin') }}" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        
+        <div style="display:grid; grid-template-columns: 1fr 2fr 1fr; gap:16px;">
+            <input name="pin" type="text" placeholder="Set 4-Digit PIN" maxlength="4" pattern="\d{4}" required>
+            
+            <select name="question" required style="background:#0a0a0a; color:#fff; border:1px solid #333;">
+                <option value="" disabled selected>Select Security Question...</option>
+                <option value="What was your first pet's name?">First pet's name?</option>
+                <option value="What is your mother's maiden name?">Mother's maiden name?</option>
+                <option value="In what city were you born?">City of birth?</option>
+                <option value="What was the make of your first car?">First car make?</option>
+            </select>
+            
+            <input name="answer" placeholder="Your Answer" required>
+        </div>
+        
+        <button style="margin-top:16px; border-color:#d4af37; color:#d4af37">ESTABLISH SECURITY</button>
+    </form>
+</div>
+{% else %}
+<div style="margin-bottom:48px; display:flex; justify-content:space-between; align-items:center; border:1px solid #004400; background:#001100; padding:16px;">
+    <span style="color:#44ff44; font-weight:bold;">✅ CLEARANCE ACTIVE: MASTER PIN SET</span>
+    <a href="{{ url_for('reset_pin_request') }}" style="font-size:12px; color:#888;">FORGOT PIN?</a>
+</div>
+{% endif %}
+
+<h1 class="section-title">Patient Vaults</h1>
+
+<div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap:32px;">
+    {% for patient in patients %}
+    <div class="card">
+        <div style="font-size:20px; font-weight:600; margin-bottom:4px;">{{ patient.username }}</div>
+        <div style="color:#555; font-size:12px; margin-bottom:24px">STATUS: 🔒 LOCKED</div>
+        
+        <form action="{{ url_for('unlock_patient', patient_id=patient.id) }}" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div style="display:flex; gap:12px;">
+                <input type="password" name="pin_attempt" placeholder="PATIENT PIN" maxlength="4" required style="text-align:center; letter-spacing:2px;">
+                <button>UNLOCK</button>
+            </div>
+        </form>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

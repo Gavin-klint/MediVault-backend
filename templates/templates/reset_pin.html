@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div style="max-width:500px; margin:auto;">
+    <h1 class="section-title">RESET MASTER PIN</h1>
+    
+    <div class="card" style="border-color:#cc4444;">
+        <h3 style="margin-top:0; border-bottom:1px solid #550000; padding-bottom:12px; font-size:16px; color:#ff4444;">SECURITY CHALLENGE</h3>
+        
+        <p style="color:#aaa; font-size:13px; margin-bottom:24px;">
+            To reset your credentials, you must answer your pre-established security question.
+        </p>
+
+        <form method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            
+            <div style="margin-bottom:24px;">
+                <label class="muted" style="color:#d4af37;">SECURITY QUESTION</label>
+                <div style="font-size:16px; padding:12px; background:#111; border:1px solid #333; color:#fff; margin-top:8px;">
+                    {{ current_user.security_question or "NO QUESTION SET" }}
+                </div>
+            </div>
+
+            <div style="margin-bottom:24px;">
+                <label class="muted">YOUR ANSWER</label>
+                <input type="text" name="answer" required autocomplete="off" autofocus>
+            </div>
+
+            <div style="border-top:1px dashed #333; margin:24px 0;"></div>
+
+            <div style="margin-bottom:32px;">
+                <label class="muted">NEW 4-DIGIT PIN</label>
+                <input type="password" name="new_pin" maxlength="4" pattern="\d{4}" placeholder="0000" required style="text-align:center; letter-spacing:3px;">
+            </div>
+
+            <button style="border-color:#cc4444; color:#ff4444;">RESET CREDENTIALS</button>
+        </form>
+        
+        <div style="text-align:center; margin-top:24px;">
+            <a href="{{ url_for('dashboard') }}" style="font-size:12px; color:#666;">CANCEL REQUEST</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
