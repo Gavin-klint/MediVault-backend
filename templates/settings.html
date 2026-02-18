@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1 class="section-title">Security Configuration</h1>
+
+<div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap:64px;">
+
+    <div class="card">
+        <h3 style="margin-top:0; border-bottom:1px solid #333; padding-bottom:12px; font-size:16px; color:#4444ff;">CHANGE PASSWORD</h3>
+        
+        <form action="{{ url_for('update_password') }}" method="POST" style="margin-top:24px;">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            
+            <label class="muted">CURRENT PASSWORD</label>
+            <input type="password" name="current_password" required style="margin-bottom:16px;">
+            
+            <div style="border-top:1px dashed #333; margin:16px 0;"></div>
+
+            <label class="muted">NEW PASSWORD</label>
+            <input type="password" name="new_password" placeholder="Min 8 chars, 1 number, 1 symbol" required style="margin-bottom:24px;">
+            
+            <button style="border-color:#4444ff; color:#6666ff;">UPDATE PASSWORD</button>
+        </form>
+    </div>
+
+    {% if current_user.role == 'patient' %}
+    <div class="card">
+        <h3 style="margin-top:0; border-bottom:1px solid #333; padding-bottom:12px; font-size:16px; color:#d4af37;">UPDATE MASTER PIN</h3>
+        
+        <form action="{{ url_for('update_pin') }}" method="POST" style="margin-top:24px;">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            
+            <label class="muted">CURRENT PASSWORD</label>
+            <input type="password" name="current_password" required style="margin-bottom:16px;">
+            
+            <div style="border-top:1px dashed #333; margin:16px 0;"></div>
+
+            <label class="muted">NEW MASTER PIN (4 DIGITS)</label>
+            <input type="password" name="new_pin" maxlength="4" placeholder="e.g. 9999" required style="margin-bottom:24px; text-align:center; letter-spacing:3px;">
+            
+            <button style="border-color:#d4af37; color:#d4af37;">UPDATE PIN</button>
+        </form>
+    </div>
+    {% endif %}
+
+</div>
+
+{% endblock %}
