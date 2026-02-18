@@ -18,3 +18,6 @@ Technical Stack
   Encryption: Cryptography (Fernet)
   Auth: Flask-Login & Werkzeug (Scrypt hashing)
   Server: Waitress (Production WSGI)
+
+Developer
+  Abhay Pratap Singh
